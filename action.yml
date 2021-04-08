@@ -1,0 +1,74 @@
+name: 'Container Scan GitHub Action'
+description: 'GitHub action for performing CVE vulnerability scans and raising alerts in OpsGenie.'
+inputs:
+  container_id:
+    description: 'Docker container ID to be scanned'
+    required: true
+  docker_compose_yaml_path:
+    description: 'Full path/filename (relative to the repository root) of the docker-compose.yaml file containing the container definition'
+    required: true
+  ignore_yaml_path:
+    description: 'Full path/filename (relative to the repository root) of the file containing vulnerabilities to ignore'
+    required: true
+  opsgenie_api_key:
+    description: 'Optional OpsGenie API key used to raise alerts when vulnerabilities are found'
+    required: false
+  alert_defcon1:
+    description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of DEFCON1 level'
+    required: false
+    default: true
+  alert_critical:
+    description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of CRITICAL level'
+    required: false
+    default: true
+  alert_high:
+    description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of HIGH level'
+    required: false
+    default: true
+  alert_medium:
+    description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of MEDIUM level'
+    required: false
+    default: false
+  alert_low:
+    description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of LOW level'
+    required: false
+    default: false
+  alert_negligible:
+    description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of NEGLIGIBLE level'
+    required: false
+    default: false
+  alert_unknown:
+    description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of UNKNOWN level'
+    required: false
+    default: true
+  docker_base_image_repository:
+    description: 'Base image docker repository'
+    required: false
+  docker_base_image:
+    description: 'Base Docker image to pull'
+    required: false
+  docker_base_image_repository_username:
+    description: 'Base Docker image repository username'
+    required: false
+  docker_base_image_repository_password:
+    description: 'Base Docker image repository password'
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.container_id }}
+    - ${{ inputs.docker_compose_yaml_path }}
+    - ${{ inputs.ignore_yaml_path }}
+    - ${{ inputs.opsgenie_api_key }}
+    - ${{ inputs.alert_defcon1 }}
+    - ${{ inputs.alert_critical }}
+    - ${{ inputs.alert_high }}
+    - ${{ inputs.alert_medium }}
+    - ${{ inputs.alert_low }}
+    - ${{ inputs.alert_negligible }}
+    - ${{ inputs.alert_unknown }}
+    - ${{ inputs.docker_base_image_repository }}
+    - ${{ inputs.docker_base_image }}
+    - ${{ inputs.docker_base_image_repository_username }}
+    - ${{ inputs.docker_base_image_repository_password }}

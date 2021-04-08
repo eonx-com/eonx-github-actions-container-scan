@@ -1,3 +1,3 @@
-# Project Template
+# Container Scan GitHub Action
 
-Placeholder document
+GitHub action for performing CVE vulnerability scans and raising alerts in OpsGenie.
