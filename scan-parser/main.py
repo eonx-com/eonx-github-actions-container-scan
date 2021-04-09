@@ -7,8 +7,6 @@ import yaml
 
 from datetime import datetime
 
-print(os.environ)
-
 vulnerabilities_by_severity = {}
 alerts_by_severity = {}
 alerts_ignored_by_severity = {}
@@ -96,11 +94,11 @@ if len(alerts_by_severity) > 0:
             alert_content += f'{str(vulnerability["severity"]).upper()}: {vulnerability["vulnerability"]} ({vulnerability["featurename"]} {vulnerability["featureversion"]}) - {vulnerability["description"]}\n\n'
 
 # Check if we should be raising an OpsGenie alert
-if 'OPSGENIE_CONTAINER_SCAN_API_KEY' in os.environ.keys() and len(os.environ["OPSGENIE_CONTAINER_SCAN_API_KEY"].strip()) > 0:
+if 'OPSGENIE_API_KEY' in os.environ.keys() and len(os.environ["OPSGENIE_API_KEY"].strip()) > 0:
     if count > 0:
         print('Raising OpsGenie alert')
         opsgenie_configuration = opsgenie_sdk.configuration.Configuration()
-        opsgenie_configuration.api_key['Authorization'] = os.environ['OPSGENIE_CONTAINER_SCAN_API_KEY']
+        opsgenie_configuration.api_key['Authorization'] = os.environ['OPSGENIE_API_KEY']
         opsgenie_api_client = opsgenie_sdk.api_client.ApiClient(configuration=opsgenie_configuration)
         opsgenie_alert_api = opsgenie_sdk.AlertApi(api_client=opsgenie_api_client)
         opsgenie_alert_prefix = os.environ["OPSGENIE_ALERT_PREFIX"].strip()
