@@ -71,8 +71,10 @@ if os.path.exists('./scan-results.json') is False:
     print('ERROR: Could not load scan results')
     exit(1)
 
+print('Loading scan results')
 with open('./scan-results.json') as scan_results_file:
-    scan_results = json.loads(scan_results_file.read())
+    scan_results_raw = scan_results_file.read().strip()
+    scan_results = json.loads(scan_results_raw)
     for vulnerability in scan_results[0]['vulnerabilities']:
         vulnerability_id = str(vulnerability['vulnerability']).upper()
         severity = str(vulnerability['severity']).upper()
