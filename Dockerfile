@@ -20,7 +20,8 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-co
 # Install Python3/Pip
 RUN DEBIAN_FRONTEND=noninteractive apt install -y \
         python3 \
-        python3-pip;
+        python3-pip \
+        jq;
 
 # Setup container scanning containers
 COPY ./clair/docker-compose.yaml /opt/clair/

@@ -46,9 +46,18 @@ docker-compose -f "${DOCKER_COMPOSE_YAML_PATH}" build "${CONTAINER_ID}"
 
 # Scan the resulting image
 echo "Scanning image"
-docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results.json || true
-ls -l
-cat scan-results.json
+docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results-raw.json || true
+echo
+echo
+cat scan-results-raw.json | jq -r . > scan-results.json
+echo
+echo
+cat scat-results-raw.json
+echo
+echo
+cat scan_results.json
+echo
+echo
 
 # Parse the scan results and generated OpsGenie alerts (if applicable)
 echo "Parsing scan results"
