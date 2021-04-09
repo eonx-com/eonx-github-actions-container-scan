@@ -35,9 +35,6 @@ if [[ ! -z "${DOCKER_BASE_IMAGE_REPOSITORY}" ]]; then
   docker pull "${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}"
 fi
 
-mkdir -p ./docker/environment/local.secrets.env
-touch ./docker/environment/local.secrets.env
-
 ./scripts/docker-compose.sh build ${REPOSITORY}
 docker-compose -f ./docker/clair/docker-compose.yaml run --rm scanner eonx/payment-gateway-${REPOSITORY}:latest >scan-results.json || true
 ./docker/containers/scan.py
