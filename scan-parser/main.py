@@ -7,6 +7,8 @@ import yaml
 
 from datetime import datetime
 
+print(os.environ)
+
 vulnerabilities_by_severity = {}
 alerts_by_severity = {}
 alerts_ignored_by_severity = {}
