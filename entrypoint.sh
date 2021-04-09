@@ -40,6 +40,14 @@ if [[ ! -z "${DOCKER_BASE_IMAGE_REPOSITORY}" ]]; then
   docker pull "${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}"
 fi
 
+# Build the container
+echo "Building container"
 docker-compose -f "${DOCKER_COMPOSE_YAML_PATH}" build "${CONTAINER_ID}"
-docker-compose -f ./docker/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results.json || true
+
+# Scan the resulting image
+echo "Scanning image"
+docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results.json || true
+
+# Parse the scan results and generated OpsGenie alerts (if applicable)
+echo "Parsing scan results"
 /opt/scan-parser/main.py
