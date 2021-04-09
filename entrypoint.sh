@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+redirect_stderr() {
+    if [ "$VERBOSE" = 1 ]; then
+        "$@"
+    else
+        "$@" 2>/dev/null
+    fi
+}
+
+redirect_all() {
+    if [ "$VERBOSE" = 1 ]; then
+        "$@"
+    else
+        "$@" 2>/dev/null >/dev/null
+    fi
+}
+
 export CONTAINER_ID="${1}"
 export CONTAINER_IMAGE="${2}"
 export DOCKER_COMPOSE_YAML_PATH="${3}"
@@ -46,19 +62,14 @@ docker-compose -f "${DOCKER_COMPOSE_YAML_PATH}" build "${CONTAINER_ID}"
 
 # Scan the resulting image
 echo "Scanning image"
-docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results-raw.json || true
-echo
-echo
+redirect_stderr docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results-raw.json || true
+return_value=$?
+cat scan-results-raw.json
 cat scan-results-raw.json | jq -r . > scan-results.json
-echo
-echo
-cat scat-results-raw.json
-echo
-echo
 cat scan_results.json
-echo
-echo
 
 # Parse the scan results and generated OpsGenie alerts (if applicable)
 echo "Parsing scan results"
 /opt/scan-parser/main.py
+
+exit $return_value
