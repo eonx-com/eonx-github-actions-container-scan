@@ -96,48 +96,56 @@ if len(alerts_by_severity) > 0:
 # Check if we should be raising an OpsGenie alert
 if 'OPSGENIE_API_KEY' in os.environ.keys() and len(os.environ["OPSGENIE_API_KEY"].strip()) > 0:
     if count > 0:
-        print('Raising OpsGenie alert')
-        opsgenie_configuration = opsgenie_sdk.configuration.Configuration()
-        opsgenie_configuration.api_key['Authorization'] = os.environ['OPSGENIE_API_KEY']
-        opsgenie_api_client = opsgenie_sdk.api_client.ApiClient(configuration=opsgenie_configuration)
-        opsgenie_alert_api = opsgenie_sdk.AlertApi(api_client=opsgenie_api_client)
-        opsgenie_alert_prefix = os.environ["OPSGENIE_ALERT_PREFIX"].strip()
-        opsgenie_alert_teams = os.environ["OPSGENIE_ALERT_TEAMS"].strip().split(',')
-        opsgenie_alert_level = os.environ["OPSGENIE_ALERT_LEVEL"].strip().upper()
-        opsgenie_entity = os.environ["OPSGENIE_ENTITY"].strip()
-        alert_hash = hashlib.md5(f'{opsgenie_alert_prefix}\n{alert_content}'.encode('utf-8')).hexdigest()
+        try:
+            print('Raising OpsGenie alert')
+            opsgenie_configuration = opsgenie_sdk.configuration.Configuration()
+            opsgenie_configuration.api_key['Authorization'] = os.environ['OPSGENIE_API_KEY']
+            opsgenie_api_client = opsgenie_sdk.api_client.ApiClient(configuration=opsgenie_configuration)
+            opsgenie_alert_api = opsgenie_sdk.AlertApi(api_client=opsgenie_api_client)
+            opsgenie_alert_prefix = os.environ["OPSGENIE_ALERT_PREFIX"].strip()
+            opsgenie_alert_teams = os.environ["OPSGENIE_ALERT_TEAMS"].strip().split(',')
+            opsgenie_alert_level = os.environ["OPSGENIE_ALERT_LEVEL"].strip().upper()
+            opsgenie_entity = os.environ["OPSGENIE_ENTITY"].strip()
+            alert_hash = hashlib.md5(f'{opsgenie_alert_prefix}\n{alert_content}'.encode('utf-8')).hexdigest()
 
-        if len(opsgenie_entity) == 0:
-            opsgenie_entity = 'GitHub Actions'
-        if len(opsgenie_alert_level) == 0:
-            opsgenie_alert_level = 'P3'
-        if len(opsgenie_alert_prefix) > 0:
-            opsgenie_alert_prefix = f'{opsgenie_alert_prefix}: '
+            if len(opsgenie_entity) == 0:
+                opsgenie_entity = 'GitHub Actions'
+            if len(opsgenie_alert_level) == 0:
+                opsgenie_alert_level = 'P3'
+            if len(opsgenie_alert_prefix) > 0:
+                opsgenie_alert_prefix = f'{opsgenie_alert_prefix}: '
 
-        # If an invalid alert level was specified error out
-        if opsgenie_alert_level not in ('P1', 'P2', 'P3', 'P4', 'P5'):
-            print('WARNING: Invalid OpsGenie alert level specified')
+            # If an invalid alert level was specified error out
+            if opsgenie_alert_level not in ('P1', 'P2', 'P3', 'P4', 'P5'):
+                print('WARNING: Invalid OpsGenie alert level specified')
+                exit(1)
+
+            # Setup responders
+            responders = []
+            for opsgenie_alert_team in opsgenie_alert_teams:
+                print(f'Adding team: {opsgenie_alert_team}')
+                responders.append({
+                    'type': 'team',
+                    'name': opsgenie_alert_team
+                })
+
+            print('Creating alert payload')
+            alert_payload = opsgenie_sdk.CreateAlertPayload(
+                message=f'{opsgenie_alert_prefix}{count} Container vulnerabilities identified',
+                alias=alert_hash,
+                description=alert_content,
+                responders=responders,
+                entity=opsgenie_entity,
+                priority=opsgenie_alert_level
+            )
+
+            opsgenie_response = opsgenie_alert_api.create_alert(create_alert_payload=alert_payload)
+            print(opsgenie_response)
+        except Exception as exception:
+            print(f'ERROR: Failed to raise OpsGenie alert ({exception})')
             exit(1)
 
-        # Setup responders
-        responders = []
-        for opsgenie_alert_team in opsgenie_alert_teams:
-            responders.append({
-                'type': 'team',
-                'name': opsgenie_alert_team
-            })
-
-        alert_payload = opsgenie_sdk.CreateAlertPayload(
-            message=f'{opsgenie_alert_prefix}{count} Container vulnerabilities identified',
-            alias=alert_hash,
-            description=alert_content,
-            responders=responders,
-            entity=opsgenie_entity,
-            priority=opsgenie_alert_level
-        )
-        opsgenie_response = opsgenie_alert_api.create_alert(create_alert_payload=alert_payload)
-        print(alert_content)
-
 if count > 0:
+    print(alert_content)
     print(f'WARNING: {count} vulnerabilities were identified in container image, please review items listed above and take appropriate action.')
     exit(1)
