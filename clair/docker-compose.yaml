@@ -26,6 +26,7 @@ services:
         - clair
         volumes:
         - /var/run/docker.sock:/var/run/docker.sock:ro
+        - /tmp:/tmp
         depends_on:
             clair:
                 condition: service_healthy
