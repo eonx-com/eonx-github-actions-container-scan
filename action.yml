@@ -13,6 +13,20 @@ inputs:
   opsgenie_api_key:
     description: 'Optional OpsGenie API key used to raise alerts when vulnerabilities are found'
     required: false
+  opsgenie_alert_prefix:
+    description: 'Optional prefix to prepend to the OpsGenie alert message'
+    required: false
+  opsgenie_alert_teams:
+    description: 'Optional comma separated list of teams to be alerted to OpsGenie message'
+    required: false
+  opsgenie_alert_level:
+    description: 'Optional alert level for OpsGenie alert (defaults to P3)'
+    default: 'P3'
+    required: false
+  opsgenie_entity:
+    description: 'Optional entity name to be alerted to OpsGenie message, defaults to "GitHub Actions"'
+    default: 'GitHub Actions'
+    required: false
   alert_defcon1:
     description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of DEFCON1 level'
     required: false
@@ -61,6 +75,10 @@ runs:
     - ${{ inputs.docker_compose_yaml_path }}
     - ${{ inputs.ignore_yaml_path }}
     - ${{ inputs.opsgenie_api_key }}
+    - ${{ inputs.opsgenie_alert_prefix }}
+    - ${{ inputs.opsgenie_alert_teams }}
+    - ${{ inputs.opsgenie_alert_level }}
+    - ${{ inputs.opsgenie_entity }}
     - ${{ inputs.alert_defcon1 }}
     - ${{ inputs.alert_critical }}
     - ${{ inputs.alert_high }}
