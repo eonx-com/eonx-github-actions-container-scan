@@ -2,7 +2,10 @@ name: 'Container Scan GitHub Action'
 description: 'GitHub action for performing CVE vulnerability scans and raising alerts in OpsGenie.'
 inputs:
   container_id:
-    description: 'Docker container ID to be scanned'
+    description: 'The container ID in the docker-compose.yml file that will be built'
+    required: true
+  container_image:
+    description: 'The image output by docker-compose as a result of the build action, this is the image that will be scanned'
     required: true
   docker_compose_yaml_path:
     description: 'Full path/filename (relative to the repository root) of the docker-compose.yaml file containing the container definition'
@@ -72,6 +75,7 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.container_id }}
+    - ${{ inputs.container_image }}
     - ${{ inputs.docker_compose_yaml_path }}
     - ${{ inputs.ignore_yaml_path }}
     - ${{ inputs.opsgenie_api_key }}

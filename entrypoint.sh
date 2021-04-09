@@ -2,24 +2,25 @@
 set -eo pipefail
 
 export CONTAINER_ID="${1}"
-export DOCKER_COMPOSE_YAML_PATH="${2}"
-export IGNORE_YAML_PATH="${3}"
-export OPSGENIE_API_KEY="${4}"
-export OPSSGENIE_ALERT_PREFIX="${5}"
-export OPSSGENIE_ALERT_TEAMS="${6}"
-export OPSSGENIE_ALERT_LEVEL="${7}"
-export OPSSGENIE_ENTITY="${8}"
-export ALERT_DEFCON1="${9}"
-export ALERT_CRITICAL="${10}"
-export ALERT_HIGH="${11}"
-export ALERT_MEDIUM="${12}"
-export ALERT_LOW="${13}"
-export ALERT_NEGLIGIBLE="${14}"
-export ALERT_UNKNOWN="${15}"
-export DOCKER_BASE_IMAGE_REPOSITORY="${16}"
-export DOCKER_BASE_IMAGE="${17}"
-export DOCKER_BASE_IMAGE_REPOSITORY_USERNAME="${18}"
-export DOCKER_BASE_IMAGE_REPOSITORY_PASSWORD="${19}"
+export CONTAINER_IMAGE="${2}"
+export DOCKER_COMPOSE_YAML_PATH="${3}"
+export IGNORE_YAML_PATH="${4}"
+export OPSGENIE_API_KEY="${5}"
+export OPSSGENIE_ALERT_PREFIX="${6}"
+export OPSSGENIE_ALERT_TEAMS="${7}"
+export OPSSGENIE_ALERT_LEVEL="${8}"
+export OPSSGENIE_ENTITY="${9}"
+export ALERT_DEFCON1="${10}"
+export ALERT_CRITICAL="${11}"
+export ALERT_HIGH="${12}"
+export ALERT_MEDIUM="${13}"
+export ALERT_LOW="${14}"
+export ALERT_NEGLIGIBLE="${15}"
+export ALERT_UNKNOWN="${16}"
+export DOCKER_BASE_IMAGE_REPOSITORY="${17}"
+export DOCKER_BASE_IMAGE="${18}"
+export DOCKER_BASE_IMAGE_REPOSITORY_USERNAME="${19}"
+export DOCKER_BASE_IMAGE_REPOSITORY_PASSWORD="${20}"
 
 if [[ ! -f "${DOCKER_COMPOSE_YAML_PATH}" ]]; then
   echo "ERROR: The requested docker-compose.yml file (${DOCKER_COMPOSE_YAML_PATH}) could not be found";
@@ -39,6 +40,6 @@ if [[ ! -z "${DOCKER_BASE_IMAGE_REPOSITORY}" ]]; then
   docker pull "${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}"
 fi
 
-./scripts/docker-compose.sh build ${REPOSITORY}
-docker-compose -f ./docker/clair/docker-compose.yaml run --rm scanner eonx/payment-gateway-${REPOSITORY}:latest >scan-results.json || true
-./docker/containers/scan.py
+docker-compose -f "${DOCKER_COMPOSE_YAML_PATH}" build "${REPOSITORY}"
+docker-compose -f ./docker/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results.json || true
+/opt/scan-parser/main.py
