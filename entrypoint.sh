@@ -40,6 +40,6 @@ if [[ ! -z "${DOCKER_BASE_IMAGE_REPOSITORY}" ]]; then
   docker pull "${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}"
 fi
 
-docker-compose -f "${DOCKER_COMPOSE_YAML_PATH}" build "${REPOSITORY}"
+docker-compose -f "${DOCKER_COMPOSE_YAML_PATH}" build "${CONTAINER_ID}"
 docker-compose -f ./docker/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results.json || true
 /opt/scan-parser/main.py
