@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-export CONTAINER="${1}"
+export CONTAINER_ID="${1}"
 export DOCKER_COMPOSE_YAML_PATH="${2}"
 export IGNORE_YAML_PATH="${3}"
 export OPSGENIE_API_KEY="${4}"
