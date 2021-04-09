@@ -23,19 +23,19 @@ export DOCKER_BASE_IMAGE_REPOSITORY_USERNAME="${19}"
 export DOCKER_BASE_IMAGE_REPOSITORY_PASSWORD="${20}"
 
 if [[ ! -f "${DOCKER_COMPOSE_YAML_PATH}" ]]; then
-  echo "ERROR: The requested docker-compose.yml file (${DOCKER_COMPOSE_YAML_PATH}) could not be found";
-  exit 1;
+  echo "ERROR: The requested docker-compose.yml file (${DOCKER_COMPOSE_YAML_PATH}) could not be found"
+  exit 1
 fi
 
 if [[ ! -f "${IGNORE_YAML_PATH}" ]]; then
   if [[ ! -z "${IGNORE_YAML_PATH}" ]]; then
-    echo "WARNING: The requested ignore file (${IGNORE_YAML_PATH}) could not be found";
+    echo "WARNING: The requested ignore file (${IGNORE_YAML_PATH}) could not be found"
   fi
   export IGNORE_YAML_PATH=""
 fi
 
 if [[ ! -z "${DOCKER_BASE_IMAGE_REPOSITORY}" ]]; then
-  echo "Pulling base Docker image: ${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}";
+  echo "Pulling base Docker image: ${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}"
   echo "${DOCKER_BASE_IMAGE_REPOSITORY_PASSWORD}" | docker login "${DOCKER_BASE_IMAGE_REPOSITORY}" --username ${DOCKER_BASE_IMAGE_REPOSITORY_USERNAME} --password-stdin
   docker pull "${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}"
 fi
@@ -49,16 +49,10 @@ echo "Scanning image"
 docker pull arminc/clair-db:latest
 docker pull arminc/clair-local-scan:v2.0.5
 docker pull quay.io/usr42/clair-container-scan:latest
-docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results-raw.json 2>/tmp/stderr.log || true
-echo "xxx"
-cat scan-results-raw.json
-echo "xxx"
-cat scan-results-raw.json | jq -r . > scan-results.json
-return_value=$?
-cat scan-results.json
+docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" >scan-results-raw.json 2>/tmp/stderr.log || true
+cat scan-results-raw.json | jq -r . >scan-results.json
 
 # Parse the scan results and generated OpsGenie alerts (if applicable)
 echo "Parsing scan results"
 /opt/scan-parser/main.py
-
-exit $return_value
+exit 0

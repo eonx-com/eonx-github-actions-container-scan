@@ -148,4 +148,3 @@ if 'OPSGENIE_API_KEY' in os.environ.keys() and len(os.environ["OPSGENIE_API_KEY"
 if count > 0:
     print(alert_content)
     print(f'WARNING: {count} vulnerabilities were identified in container image, please review items listed above and take appropriate action.')
-    exit(1)
