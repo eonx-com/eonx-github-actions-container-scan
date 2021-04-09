@@ -46,6 +46,7 @@ docker-compose -f "${DOCKER_COMPOSE_YAML_PATH}" build "${CONTAINER_ID}"
 
 # Scan the resulting image
 echo "Scanning image"
+docker-compose -f /opt/clair/docker-compose.yaml up clair
 docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" > scan-results-raw.json 2>/tmp/stderr.log || true
 echo "xxx"
 cat scan-results-raw.json
