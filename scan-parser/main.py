@@ -98,20 +98,29 @@ if 'OPSGENIE_API_KEY' in os.environ.keys() and len(os.environ["OPSGENIE_API_KEY"
     if count > 0:
         try:
             print('Raising OpsGenie alert')
+            if 'OPSGENIE_ALERT_TEAMS' not in os.environ.keys():
+                print('ERROR: No OPSGENIE_ALERT_TEAMS value specified')
+                exit(1)
             opsgenie_configuration = opsgenie_sdk.configuration.Configuration()
             opsgenie_configuration.api_key['Authorization'] = os.environ['OPSGENIE_API_KEY']
             opsgenie_api_client = opsgenie_sdk.api_client.ApiClient(configuration=opsgenie_configuration)
             opsgenie_alert_api = opsgenie_sdk.AlertApi(api_client=opsgenie_api_client)
+            if 'OPSGENIE_ALERT_PREFIX' not in os.environ.keys():
+                os.environ['OPSGENIE_ALERT_PREFIX'] = ''
             opsgenie_alert_prefix = os.environ["OPSGENIE_ALERT_PREFIX"].strip()
             opsgenie_alert_teams = os.environ["OPSGENIE_ALERT_TEAMS"].strip().split(',')
+            if 'OPSGENIE_ALERT_LEVEL' not in os.environ.keys():
+                os.environ['OPSGENIE_ALERT_LEVEL'] = 'P3'
             opsgenie_alert_level = os.environ["OPSGENIE_ALERT_LEVEL"].strip().upper()
+            if 'OPSGENIE_ENTITY' not in os.environ.keys():
+                os.environ['OPSGENIE_ENTITY'] = 'GitHub Actions'
             opsgenie_entity = os.environ["OPSGENIE_ENTITY"].strip()
             alert_hash = hashlib.md5(f'{opsgenie_alert_prefix}\n{alert_content}'.encode('utf-8')).hexdigest()
 
-            if len(opsgenie_entity) == 0:
-                opsgenie_entity = 'GitHub Actions'
             if len(opsgenie_alert_level) == 0:
                 opsgenie_alert_level = 'P3'
+            if len(opsgenie_entity) == 0:
+                opsgenie_entity = 'GitHub Actions'
             if len(opsgenie_alert_prefix) > 0:
                 opsgenie_alert_prefix = f'{opsgenie_alert_prefix}: '
 
