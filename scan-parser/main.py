@@ -39,6 +39,7 @@ if len(severities) == 0:
 ignore_yaml_path = os.environ['IGNORE_YAML_PATH'].strip()
 
 if len(ignore_yaml_path) > 0:
+    print('Loading ignored vulnerabilities file')
     # Make sure the ignore file exists we one was specified
     if os.path.exists(ignore_yaml_path) is False:
         print(f'ERROR: Ignore file ({ignore_yaml_path}) could not be found')
@@ -47,8 +48,9 @@ if len(ignore_yaml_path) > 0:
     # Load the details of ignored vulnerabilities
     try:
         with open(ignore_yaml_path) as scan_config_file:
+            print('Reading YAML')
             ignore_yaml = yaml.load(scan_config_file.read(), Loader=yaml.FullLoader)
-
+            print(ignore_yaml)
             # Setup arrays with severity levels that we are tracking
             for severity in severities:
                 vulnerabilities_by_severity[str(severity).upper()] = []
