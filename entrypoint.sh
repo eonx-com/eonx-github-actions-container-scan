@@ -31,6 +31,9 @@ echo "Ignore file: ${IGNORE_YAML_PATH}";
 if [[ ! -z "${IGNORE_YAML_PATH}" ]]; then
   if [[ ! -f "${IGNORE_YAML_PATH}" ]]; then
     echo "WARNING: The requested ignore file (${IGNORE_YAML_PATH}) could not be found"
+  else
+    cat ${IGNORE_YAML_PATH};
+    cp ${IGNORE_YAML_PATH} /opt/scan-parser/ignore.yml
   fi
 fi
 

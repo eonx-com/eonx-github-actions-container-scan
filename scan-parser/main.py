@@ -36,14 +36,11 @@ if len(severities) == 0:
     exit(1)
 
 # Load any ignored alert details
-ignore_yaml_path = os.environ['IGNORE_YAML_PATH'].strip()
+ignore_yaml_path = '/opt/scan-parser/ignore.yml'
 
-if len(ignore_yaml_path) > 0:
-    print('Loading ignored vulnerabilities file')
-    # Make sure the ignore file exists we one was specified
-    if os.path.exists(ignore_yaml_path) is False:
-        print(f'ERROR: Ignore file ({ignore_yaml_path}) could not be found')
-        exit(1)
+print('Loading ignored vulnerabilities file')
+# Make sure the ignore file exists we one was specified
+if os.path.exists(ignore_yaml_path) is True:
 
     # Load the details of ignored vulnerabilities
     try:
@@ -63,7 +60,6 @@ if len(ignore_yaml_path) > 0:
                     # Only interested in non-expired ignore directives
                     if ignored_vulnerability['expiry'] <= datetime.now().date():
                         ignored_vulnerabilities_by_id[str(ignored_vulnerability['id']).upper()] = ignored_vulnerability
-
     except Exception as exception:
         print('ERROR: Failed to parse ignore YAML file ({exception})')
         exit(1)
