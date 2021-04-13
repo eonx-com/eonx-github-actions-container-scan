@@ -58,7 +58,7 @@ if os.path.exists(ignore_yaml_path) is True:
             if 'ignored_vulnerabilities' in ignore_yaml.keys():
                 for ignored_vulnerability in ignore_yaml['ignored_vulnerabilities']:
                     # Only interested in non-expired ignore directives
-                    if ignored_vulnerability['expiry'] <= datetime.now().date():
+                    if ignored_vulnerability['expiry'] >= datetime.now().date():
                         ignored_vulnerabilities_by_id[str(ignored_vulnerability['id']).upper()] = ignored_vulnerability
     except Exception as exception:
         print('ERROR: Failed to parse ignore YAML file ({exception})')
