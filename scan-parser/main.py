@@ -45,9 +45,7 @@ if os.path.exists(ignore_yaml_path) is True:
     # Load the details of ignored vulnerabilities
     try:
         with open(ignore_yaml_path) as scan_config_file:
-            print('Reading YAML')
             ignore_yaml = yaml.load(scan_config_file.read(), Loader=yaml.FullLoader)
-            print(ignore_yaml)
             # Setup arrays with severity levels that we are tracking
             for severity in severities:
                 vulnerabilities_by_severity[str(severity).upper()] = []
