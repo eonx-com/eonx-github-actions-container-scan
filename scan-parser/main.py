@@ -71,6 +71,9 @@ if os.path.exists('./scan-results.json') is False:
     print('ERROR: Could not load scan results')
     exit(1)
 
+print('Ignored vulnerabilities')
+print(ignored_vulnerabilities_by_id)
+
 print('Loading scan results')
 with open('./scan-results.json') as scan_results_file:
     scan_results_raw = scan_results_file.read().strip()
@@ -80,6 +83,7 @@ with open('./scan-results.json') as scan_results_file:
         severity = str(vulnerability['severity']).upper()
         if severity in vulnerabilities_by_severity.keys():
             if vulnerability_id in ignored_vulnerabilities_by_id.keys():
+                print(f'Ignoring CVE: {vulnerability_id}')
                 alerts_ignored_by_severity[severity].append(vulnerability)
                 continue
             alerts_by_severity[severity].append(vulnerability)
