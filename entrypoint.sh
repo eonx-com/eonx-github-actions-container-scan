@@ -32,7 +32,6 @@ if [[ ! -z "${IGNORE_YAML_PATH}" ]]; then
   if [[ ! -f "${IGNORE_YAML_PATH}" ]]; then
     echo "WARNING: The requested ignore file (${IGNORE_YAML_PATH}) could not be found"
   fi
-  export IGNORE_YAML_PATH=""
 fi
 
 if [[ ! -z "${DOCKER_BASE_IMAGE_REPOSITORY}" ]]; then
