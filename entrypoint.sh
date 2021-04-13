@@ -27,8 +27,9 @@ if [[ ! -f "${DOCKER_COMPOSE_YAML_PATH}" ]]; then
   exit 1
 fi
 
-if [[ ! -f "${IGNORE_YAML_PATH}" ]]; then
-  if [[ ! -z "${IGNORE_YAML_PATH}" ]]; then
+echo "Ignore file: ${IGNORE_YAML_PATH}";
+if [[ ! -z "${IGNORE_YAML_PATH}" ]]; then
+  if [[ ! -f "${IGNORE_YAML_PATH}" ]]; then
     echo "WARNING: The requested ignore file (${IGNORE_YAML_PATH}) could not be found"
   fi
   export IGNORE_YAML_PATH=""
