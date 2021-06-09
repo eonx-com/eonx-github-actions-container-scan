@@ -71,7 +71,7 @@ print('Ignored vulnerabilities')
 print(ignored_vulnerabilities_by_id)
 
 print('Loading scan results')
-with open('./scan-results.json', 'rt') as scan_results_file:
+with open('./scan-results.json', 'r', encoding='utf-8') as scan_results_file:
     scan_results_raw = scan_results_file.read().strip()
     scan_results = json.loads(scan_results_raw)
     for vulnerability in scan_results[0]['vulnerabilities']:
