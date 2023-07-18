@@ -21,6 +21,7 @@ export DOCKER_BASE_IMAGE_REPOSITORY="${17}"
 export DOCKER_BASE_IMAGE="${18}"
 export DOCKER_BASE_IMAGE_REPOSITORY_USERNAME="${19}"
 export DOCKER_BASE_IMAGE_REPOSITORY_PASSWORD="${20}"
+export COMPOSER_PRIVATE_TOKEN="${21}"
 
 if [[ ! -f "${DOCKER_COMPOSE_YAML_PATH}" ]]; then
   echo "ERROR: The requested docker-compose.yml file (${DOCKER_COMPOSE_YAML_PATH}) could not be found"

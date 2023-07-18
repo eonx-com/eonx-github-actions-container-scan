@@ -70,6 +70,9 @@ inputs:
   docker_base_image_repository_password:
     description: 'Base Docker image repository password'
     required: false
+  composer_private_token:
+    description: 'GitHub Token for Composer private packages'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -94,3 +97,4 @@ runs:
     - ${{ inputs.docker_base_image }}
     - ${{ inputs.docker_base_image_repository_username }}
     - ${{ inputs.docker_base_image_repository_password }}
+    - ${{ inputs.composer_private_token }}
