@@ -58,17 +58,14 @@ inputs:
     description: 'Boolean flag, if true will generate alerts on all CVE vulnerabilities of UNKNOWN level'
     required: false
     default: true
-  docker_base_image_repository:
-    description: 'Base image docker repository'
+  docker_login_registry:
+    description: 'Docker registry to login to'
     required: false
-  docker_base_image:
-    description: 'Base Docker image to pull'
+  docker_login_registry_username:
+    description: 'Docker registry username'
     required: false
-  docker_base_image_repository_username:
-    description: 'Base Docker image repository username'
-    required: false
-  docker_base_image_repository_password:
-    description: 'Base Docker image repository password'
+  docker_login_registry_password:
+    description: 'Docker registry password'
     required: false
   composer_private_token:
     description: 'GitHub Token for Composer private packages'
@@ -93,8 +90,7 @@ runs:
     - ${{ inputs.alert_low }}
     - ${{ inputs.alert_negligible }}
     - ${{ inputs.alert_unknown }}
-    - ${{ inputs.docker_base_image_repository }}
-    - ${{ inputs.docker_base_image }}
-    - ${{ inputs.docker_base_image_repository_username }}
-    - ${{ inputs.docker_base_image_repository_password }}
+    - ${{ inputs.docker_login_registry }}
+    - ${{ inputs.docker_login_registry_username }}
+    - ${{ inputs.docker_login_registry_password }}
     - ${{ inputs.composer_private_token }}

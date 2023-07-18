@@ -17,11 +17,10 @@ export ALERT_MEDIUM="${13}"
 export ALERT_LOW="${14}"
 export ALERT_NEGLIGIBLE="${15}"
 export ALERT_UNKNOWN="${16}"
-export DOCKER_BASE_IMAGE_REPOSITORY="${17}"
-export DOCKER_BASE_IMAGE="${18}"
-export DOCKER_BASE_IMAGE_REPOSITORY_USERNAME="${19}"
-export DOCKER_BASE_IMAGE_REPOSITORY_PASSWORD="${20}"
-export COMPOSER_PRIVATE_TOKEN="${21}"
+export DOCKER_LOGIN_REGISTRY="${17}"
+export DOCKER_LOGIN_REGISTRY_USERNAME="${18}"
+export DOCKER_LOGIN_REGISTRY_PASSWORD="${19}"
+export COMPOSER_PRIVATE_TOKEN="${20}"
 
 if [[ ! -f "${DOCKER_COMPOSE_YAML_PATH}" ]]; then
   echo "ERROR: The requested docker-compose.yml file (${DOCKER_COMPOSE_YAML_PATH}) could not be found"
@@ -38,10 +37,9 @@ if [[ ! -z "${IGNORE_YAML_PATH}" ]]; then
   fi
 fi
 
-if [[ ! -z "${DOCKER_BASE_IMAGE_REPOSITORY}" ]]; then
-  echo "Pulling base Docker image: ${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}"
-  echo "${DOCKER_BASE_IMAGE_REPOSITORY_PASSWORD}" | docker login "${DOCKER_BASE_IMAGE_REPOSITORY}" --username ${DOCKER_BASE_IMAGE_REPOSITORY_USERNAME} --password-stdin
-  docker pull "${DOCKER_BASE_IMAGE_REPOSITORY}/${DOCKER_BASE_IMAGE}"
+if [[ ! -z "${DOCKER_LOGIN_REGISTRY}" ]]; then
+  echo "Login to docker registry: ${DOCKER_LOGIN_REGISTRY}"
+  echo "${DOCKER_LOGIN_REGISTRY_PASSWORD}" | docker login "${DOCKER_LOGIN_REGISTRY}" --username ${DOCKER_LOGIN_REGISTRY_USERNAME} --password-stdin
 fi
 
 # Build the container
