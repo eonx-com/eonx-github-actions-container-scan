@@ -14,7 +14,7 @@ RUN apt update; \
         docker-ce;
 
 # Install Docker Compose
-RUN curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose; \
+RUN curl -L https://github.com/docker/compose/releases/download/2.24.6/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose; \
     chmod +x /usr/local/bin/docker-compose;
 
 # Install Python3/Pip

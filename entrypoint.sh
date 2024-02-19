@@ -49,7 +49,7 @@ docker-compose -f "${DOCKER_COMPOSE_YAML_PATH}" build "${CONTAINER_ID}"
 # Scan the resulting image
 echo "Scanning image"
 docker pull arminc/clair-db:latest
-docker pull arminc/clair-local-scan:v2.0.5
+docker pull arminc/clair-local-scan:latest
 docker pull quay.io/usr42/clair-container-scan:latest
 docker-compose -f /opt/clair/docker-compose.yaml run --rm scanner "${CONTAINER_IMAGE}" >scan-results-raw.json 2>/tmp/stderr.log || true
 cat scan-results-raw.json | jq -r . >scan-results.json
